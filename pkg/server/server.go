@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/sam39rus/go_final_project/pkg/api"
 )
 
 // Run запускает HTTP-файл-сервер на заданном или стандартном порте
@@ -25,6 +27,9 @@ func Run() error {
 			return fmt.Errorf("invalid TODO_PORT: %w", err)
 		}
 	}
+
+	// Инициализируем API-обработчики
+	api.Init()
 
 	// Создаем файловое хранилище для статического веб-контента из папки web
 	fs := http.FileServer(http.Dir("web"))
