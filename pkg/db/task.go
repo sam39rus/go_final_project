@@ -161,7 +161,7 @@ func DeleteTask(id string) error {
 		return err
 	}
 	if count == 0 {
-		return fmt.Errorf("a task with this id was not found.")
+		return fmt.Errorf("a task with this id was not found")
 	}
 
 	return nil
@@ -184,7 +184,7 @@ func UpdateDate(nextDate string, id string) error {
 		return err
 	}
 	if count == 0 {
-		return fmt.Errorf("a task with this id was not found.")
+		return fmt.Errorf("a task with this id was not found")
 	}
 
 	return nil
