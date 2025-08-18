@@ -12,4 +12,7 @@ func Init() {
 
 	// Маршрут для операций с отдельной задачей
 	http.HandleFunc("/api/task", taskHandler)
+
+	// Маршрут для операций с несколькими задачами одновременно
+	http.HandleFunc("/api/tasks", tasksHandler)
 }
