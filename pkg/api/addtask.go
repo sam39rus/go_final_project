@@ -108,6 +108,53 @@ func taskHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		// Обработка POST-запроса на создание задачи
 		addTaskHandler(w, r)
+	case http.MethodGet:
+		// Обработка GET-запроса на получение конкретной задачи по ID
+		id := r.URL.Query().Get("id")
+		if id == "" {
+			writeJson(w, http.StatusBadRequest, map[string]string{
+				"error": "ID not specified"})
+			return
+		}
+		task, err := db.GetTask(id)
+		if err != nil {
+			writeJson(w, http.StatusNotFound, map[string]string{
+				"error": "Issue not found"})
+			return
+		}
+		writeJson(w, http.StatusOK, task)
+	case http.MethodPut:
+		// Обработка PUT-запроса на обновление задачи
+		var task db.Task
+		err := json.NewDecoder(r.Body).Decode(&task)
+		if err != nil {
+			writeJson(w, http.StatusBadRequest, map[string]string{
+				"error": fmt.Sprintf("JSON decoding error: %v", err)})
+			return
+		}
+		if task.ID == "" {
+			writeJson(w, http.StatusBadRequest, map[string]string{
+				"error": "No task identifier provided"})
+			return
+		}
+		if task.Title == "" {
+			writeJson(w, http.StatusBadRequest, map[string]string{
+				"error": "No task title provided"})
+			return
+		}
+		err = checkDate(&task)
+		if err != nil {
+			writeJson(w, http.StatusBadRequest, map[string]string{
+				"error": err.Error()})
+			return
+		}
+		err = db.UpdateTask(&task)
+		if err != nil {
+			writeJson(w, http.StatusInternalServerError, map[string]string{
+				"error": err.Error()})
+			return
+		}
+		writeJson(w, http.StatusOK, map[string]string{})
 	default:
 		// Ответ на неподдерживаемые методы
 		http.Error(w, "The method is not supported", http.StatusMethodNotAllowed)
