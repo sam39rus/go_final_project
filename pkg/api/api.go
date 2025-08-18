@@ -9,4 +9,7 @@ import (
 func Init() {
 	// Настройка маршрута для получения следующего рабочего дня
 	http.HandleFunc("/api/nextdate", nextDayHandler)
+
+	// Маршрут для операций с отдельной задачей
+	http.HandleFunc("/api/task", taskHandler)
 }
