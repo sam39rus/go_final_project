@@ -109,14 +109,14 @@ func GetTask(id string) (*Task, error) {
 	// конвертируем id в int64
 	idInt, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		return nil, errors.New("некорректный идентификатор")
+		return nil, errors.New("invalid ID")
 	}
 
 	query := `SELECT id, date, title, comment, repeat FROM scheduler WHERE id = ?`
 	err = DB.QueryRow(query, idInt).Scan(&task.ID, &task.Date, &task.Title, &task.Comment, &task.Repeat)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errors.New("задача не найдена")
+			return nil, errors.New("issue not found")
 		}
 		return nil, err
 	}
@@ -138,7 +138,53 @@ func UpdateTask(task *Task) error {
 		return err
 	}
 	if count == 0 {
-		return fmt.Errorf("задача с id %d не найдена для обновления", task.ID)
+		return fmt.Errorf("the issue with id %s was not found for updating", task.ID)
+	}
+
+	return nil
+}
+
+// DeleteTask удаляет задачу по id
+func DeleteTask(id string) error {
+	// SQL-запрос для удаления задачи
+	query := `DELETE FROM scheduler WHERE id = ?`
+
+	// Выполнение запроса
+	res, err := DB.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	// Проверка, удалилась ли хотя бы одна строка
+	count, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		return fmt.Errorf("a task with this id was not found.")
+	}
+
+	return nil
+}
+
+// UpdateDate обновляет дату задачи по id
+func UpdateDate(nextDate string, id string) error {
+	// SQL-запрос для обновления даты задачи
+	query := `UPDATE scheduler SET date = ? WHERE id = ?`
+
+	// Выполнение запроса
+	res, err := DB.Exec(query, nextDate, id)
+	if err != nil {
+		return err
+	}
+
+	// Проверка, изменилась ли хотя бы одна строка
+	count, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		return fmt.Errorf("a task with this id was not found.")
 	}
 
 	return nil

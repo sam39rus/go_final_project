@@ -15,4 +15,7 @@ func Init() {
 
 	// Маршрут для операций с несколькими задачами одновременно
 	http.HandleFunc("/api/tasks", tasksHandler)
+
+	// Маршрут для пометки задачи как выполненной
+	http.HandleFunc("/api/task/done", doneTaskHandler)
 }
