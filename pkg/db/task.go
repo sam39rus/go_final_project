@@ -9,6 +9,9 @@ import (
 	"time"
 )
 
+const layoutSearch = "02.01.2006"
+const layoutDB = "20060102"
+
 // Задача (Task) представляет собой структурированную запись, включающую:
 type Task struct {
 	ID      string `json:"id"`      // Уникальный идентификатор задачи
@@ -48,7 +51,7 @@ func Tasks(limit int, search string) ([]*Task, error) {
 	tasks := make([]*Task, 0, limit)
 
 	// Проверяем, является ли поисковый запрос датой
-	searchDate, err := time.Parse("02.01.2006", search)
+	searchDate, err := time.Parse(layoutSearch, search)
 	isDateSearch := (err == nil)
 
 	// Выбор нужной стратегии выборки задач в зависимости от поискового запроса
@@ -59,7 +62,7 @@ func Tasks(limit int, search string) ([]*Task, error) {
 		rows, err = DB.Query(query, limit)
 	} else if isDateSearch {
 		// Если поисковый запрос является датой, ищем задачи строго по этой дате
-		searchDateStr := searchDate.Format("20060102")
+		searchDateStr := searchDate.Format(layoutDB)
 		query := `SELECT id, date, title, comment, repeat FROM scheduler WHERE date = ? ORDER BY date ASC LIMIT ?`
 		rows, err = DB.Query(query, searchDateStr, limit)
 	} else {
