@@ -58,7 +58,7 @@ func checkDate(task *db.Task) error {
 	// Оставляем только дату
 	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 
-	layout := "20060102" // Формат даты (ГГГГММДД)
+	layout := db.layoutDB // Формат даты (ГГГГММДД)
 
 	// Если дата не указана, ставим текущую дату
 	if task.Date == "" {

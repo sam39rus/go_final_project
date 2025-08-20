@@ -23,8 +23,8 @@ func tasksHandler(w http.ResponseWriter, r *http.Request) {
 	// Получаем параметры из URL-запроса
 	search := r.URL.Query().Get("search") // Фильтр поиска
 
-	// Ограничение количества результатов
-	limit := 50
+	// Глобальная константа limit ограничения вывода записей
+	const limit = 50
 
 	// Получаем список задач из базы данных
 	tasks, err := db.Tasks(limit, search)

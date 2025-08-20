@@ -47,9 +47,9 @@ func Tasks(limit int, search string) ([]*Task, error) {
 	// Создаем пустой срез для хранения задач
 	tasks := make([]*Task, 0, limit)
 
-	// Определены форматы даты для работы с поиском
-	layoutSearch := "02.01.2006" // формат даты для поиска из параметра search
-	layoutDB := "20060102"       // формат даты в базе данных
+	// Определены глобальные константы
+	const layoutSearch = "02.01.2006" // формат даты для поиска из параметра search
+	const layoutDB = "20060102"       // формат даты в базе данных
 
 	// Проверяем, является ли поисковый запрос датой
 	searchDate, err := time.Parse(layoutSearch, search)
