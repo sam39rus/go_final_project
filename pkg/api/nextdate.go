@@ -261,5 +261,10 @@ func nextDayHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Отправляем найденную дату обратно клиенту
-	w.Write([]byte(next))
+	// Доработана обработка ошибок вызова WRITE
+	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+	if _, err := w.Write([]byte(next)); err != nil {
+		http.Error(w, "Failed to send response", http.StatusInternalServerError)
+		return
+	}
 }
