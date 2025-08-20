@@ -10,9 +10,6 @@ import (
 	"time"
 )
 
-// Константа layout определяет формат представления даты ("ГГГГММДД")
-const layout = "20060102"
-
 // Функция afterNow проверяет, находится ли дата date позднее момента now
 func afterNow(date, now time.Time) bool {
 	return date.After(now)

@@ -10,6 +10,8 @@ import (
 	"github.com/sam39rus/go_final_project/pkg/db"
 )
 
+const layout = "20060102"
+
 // Функция addTaskHandler обрабатывает POST-запросы на создание новой задачи
 func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var task db.Task // Создаем новую задачу
@@ -57,8 +59,6 @@ func checkDate(task *db.Task) error {
 	now := time.Now()
 	// Оставляем только дату
 	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-
-	layout := db.layoutDB // Формат даты (ГГГГММДД)
 
 	// Если дата не указана, ставим текущую дату
 	if task.Date == "" {

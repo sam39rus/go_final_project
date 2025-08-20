@@ -150,7 +150,6 @@ func doneTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Если задача повторяющаяся, вычисляем следующую дату
-	layout := "20060102"
 	baseDate, err := time.Parse(layout, task.Date) // Преобразуем дату задачи в тип time.Time
 	if err != nil {
 		writeJson(w, http.StatusInternalServerError, map[string]string{
